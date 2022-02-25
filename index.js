@@ -6,11 +6,10 @@ const widthArray = [320, 360, 375, 414, 428, 768, 1024, 1280, 1366, 1440, 1536, 
 // image searching and browser resize functionality
 module.exports = async (inputPath)=>{
     const layoutPath = path.resolve(inputPath);
-
+    
     try {
         let results = [] 
         for (let widthValue of widthArray) {
-            
             let imageValues = new Set()
             let screen = {width: widthValue,height: 480};
             
@@ -31,18 +30,13 @@ module.exports = async (inputPath)=>{
             }
         
             await driver.quit()
-
             results.push({widths:imageValues})
-            
         }
-
-      
 
         return results
     }
     catch(err) {
         console.log(err); // TypeError: failed to fetch
     }
-
 }
 

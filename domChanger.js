@@ -5,33 +5,32 @@ require.extensions['.html'] = function (module, filename) {
     module.exports = fs.readFileSync(filename, 'utf8');
 };
 
-module.exports = async (inputPath, filename)=>{
+module.exports = (inputPath, filename)=>{
     const parsedHTML = require(inputPath);
     const root = HTMLParser.parse(parsedHTML); 
-
     const imageArray = root.querySelectorAll("img")
+    let pictureArray = []
 
     imageArray.forEach(imageEl=>{
         let hash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-        imageEl.setAttribute("data-domchangerid", hash); 
+        // TODO: Set hash as object name and return empty object
+        console.log({[hash]: {}});
+        pictureArray.push()
     })
 
     // fs.writeFile("filename.html", root.html)
 
     let dir = './dist';
-    let source = "./src";
 
-    await fs.promises.cp(source, dir)
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+    }
 
-    // if (!fs.existsSync(dir)){
-    //     fs.mkdirSync(dir);
-    // }
+    let filePath = './dist/'+filename+'.html';
 
-    // let filePath = './dist/'+filename+'.html';
+    fs.writeFile(filePath, root.innerHTML, function (err) {
+        if (err) return console.log(err);
+    });
 
-    // fs.writeFile(filePath, root.innerHTML, function (err) {
-    //     if (err) return console.log(err);
-    // });
-
-    return filePath
+    return {filePath, pictureArray}
 }
