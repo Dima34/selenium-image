@@ -5,7 +5,7 @@ require.extensions['.html'] = function (module, filename) {
     module.exports = fs.readFileSync(filename, 'utf8');
 };
 
-module.exports = (inputPath, filename)=>{
+module.exports = async (inputPath, filename)=>{
     const parsedHTML = require(inputPath);
     const root = HTMLParser.parse(parsedHTML); 
 
@@ -19,16 +19,19 @@ module.exports = (inputPath, filename)=>{
     // fs.writeFile("filename.html", root.html)
 
     let dir = './dist';
+    let source = "./src";
 
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
-    }
+    await fs.promises.cp(source, dir)
 
-    let filePath = './dist/'+filename+'.html';
+    // if (!fs.existsSync(dir)){
+    //     fs.mkdirSync(dir);
+    // }
 
-    fs.writeFile(filePath, root.innerHTML, function (err) {
-        if (err) return console.log(err);
-    });
+    // let filePath = './dist/'+filename+'.html';
+
+    // fs.writeFile(filePath, root.innerHTML, function (err) {
+    //     if (err) return console.log(err);
+    // });
 
     return filePath
 }

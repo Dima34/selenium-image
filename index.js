@@ -3,8 +3,7 @@ const path = require('path');
 const chrome = require('selenium-webdriver/chrome');
 const widthArray = [320, 360, 375, 414, 428, 768, 1024, 1280, 1366, 1440, 1536, 1920]
 
-// image find and browser resize functionality
-
+// image searching and browser resize functionality
 module.exports = async (inputPath)=>{
     const layoutPath = path.resolve(inputPath);
 
@@ -37,33 +36,7 @@ module.exports = async (inputPath)=>{
             
         }
 
-        // const results = widthArray.map(async (widthValue) => {
-        //     try {
-        //         let screen = {width: widthValue,height: 480};
-                
-        //         let driver = await new Builder()
-        //             .forBrowser('chrome')
-        //             .setChromeOptions(new chrome.Options().headless().windowSize(screen))
-        //             .build();
-            
-        //         await driver.get(layoutPath);
-            
-        //         let images = await driver.findElements(By.tagName('img'))
-        //         console.log(`array length - `, images.length);
-
-        //         let imageValues = await Promise.all(images.map(async (el) => {
-        //             let rect = await el.getRect();
-        //             return rect.width;
-        //         }))
-            
-            
-        //         await driver.quit()
-        //         return({imageValues})
-        //     }
-        //     catch(err) {
-        //         console.log(err); // TypeError: failed to fetch
-        //     }
-        // });
+      
 
         return results
     }
