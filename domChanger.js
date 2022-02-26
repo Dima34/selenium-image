@@ -9,16 +9,15 @@ module.exports = (inputPath, filename)=>{
     const parsedHTML = require(inputPath);
     const root = HTMLParser.parse(parsedHTML); 
     const imageArray = root.querySelectorAll("img")
-    let pictureArray = []
+    let pictureObj = {}
 
     imageArray.forEach(imageEl=>{
         let hash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-        // TODO: Set hash as object name and return empty object
-        console.log({[hash]: {}});
-        pictureArray.push()
+        imageEl.setAttribute("data-domchangerid", hash); 
+        pictureObj[hash] = {
+            widths: new Set()
+        };
     })
-
-    // fs.writeFile("filename.html", root.html)
 
     let dir = './dist';
 
@@ -32,5 +31,5 @@ module.exports = (inputPath, filename)=>{
         if (err) return console.log(err);
     });
 
-    return {filePath, pictureArray}
+    return {filePath, pictureObj}
 }
