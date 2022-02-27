@@ -5,7 +5,7 @@ const destination = './_dest'
 
 module.exports = ()=>{
     // copy source folder to destination
-    fs.copy(source, destination);
+    fs.copySync(source, destination);
 
     return path.resolve(destination)
 }
