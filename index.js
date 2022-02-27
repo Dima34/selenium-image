@@ -3,6 +3,7 @@ const path = require('path');
 const chrome = require('selenium-webdriver/chrome');
 const widthArray = [320, 360, 375, 414, 428, 768, 1024, 1280, 1366, 1440, 1536, 1920]
 
+
 // image searching and browser resize functionality
 module.exports = async (inputPath, pictureObj)=>{
     const layoutPath = path.resolve(inputPath);
