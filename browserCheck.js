@@ -3,7 +3,6 @@ const path = require('path');
 const chrome = require('selenium-webdriver/chrome');
 const widthArray = [320, 360, 375, 414, 428, 768, 1024, 1280, 1366, 1440, 1536, 1920]
 
-
 // image searching and browser resize functionality
 module.exports = async (inputPath, pictureObj)=>{
     const layoutPath = path.resolve(inputPath);
@@ -23,22 +22,19 @@ module.exports = async (inputPath, pictureObj)=>{
 
             for await (let el of images) {
                 let imageId = await el.getAttribute("data-domchangerid")
+                if(imageId != undefined){
+                    // If an object hasn`t a src of image - add it
+                    let obj = pictureObj[imageId]
 
-                // If an object hasn`t a src of image - add it
-                let obj = pictureObj[imageId]
-                if(obj.src===undefined){
-                    obj.src = await el.getAttribute("src")
-                }
-                console.log(`width: ${widthValue}, image width: ${await el.getRect().then(el=>el.width)}`);
-                // add width values to image info
-                await el.getRect().then(rect=>obj.widths.add(rect.width))
-                
+                    // add width values to image info
+                    await el.getRect().then(rect=>obj.widths.add(rect.width))
+                }                
             }
         
             await driver.quit()
         }
 
-        // console.log(pictureObj);
+        return pictureObj
     }
     catch(err) {
         console.log(err); // TypeError: failed to fetch

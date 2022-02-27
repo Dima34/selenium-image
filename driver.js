@@ -1,18 +1,18 @@
 const copyFolder = require("./copyFolder")
-const index = require("./index")
+const browserCheck = require("./browserCheck")
 const domChanger = require("./domChanger")
 const glob = require("glob")
 
+const source = './src'
+const destination = './_dest'
 
-const destination = copyFolder()
-const htmlFilesArr = glob.sync(destination + '/**/*.html')
+const newDestination = copyFolder(source,destination)
+const htmlFilesArr = glob.sync(newDestination + '/**/*.html')
 
 let path = htmlFilesArr[0]
-const pictureObj = domChanger(path);
+const pictureObj = domChanger(path,destination);
 
-console.log(pictureObj);
-
-// TODO: make a full folder copy and manually input path of html file which we need to change
-// (async () => { 
-//     await index.call(this,newFilepath.filePath, newFilepath.pictureObj)
-// })();
+(async () => { 
+    let filledObjArray = await browserCheck.call(this,path, pictureObj)
+    console.log(filledObjArray);
+})();

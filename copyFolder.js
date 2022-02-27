@@ -3,7 +3,7 @@ const path = require('path');
 const source = './src'
 const destination = './_dest'
 
-module.exports = ()=>{
+module.exports = (source, destination)=>{
     // copy source folder to destination
     fs.copySync(source, destination);
 
