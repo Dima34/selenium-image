@@ -1,7 +1,8 @@
 const {By,Key,Builder} = require("selenium-webdriver");
 const path = require('path');
 const chrome = require('selenium-webdriver/chrome');
-const widthArray = [320, 360, 375, 414, 428, 768, 1024, 1280, 1366, 1440, 1536, 1920]
+// const widthArray = [320, 360, 375, 414, 428, 768, 1024, 1280, 1366, 1440, 1536, 1920]
+const widthArray = [320, 1280, 1440, 1920]
 
 // image searching and browser resize functionality
 module.exports = async (inputPath, pictureObj)=>{
@@ -9,7 +10,7 @@ module.exports = async (inputPath, pictureObj)=>{
     
     try {
         for (let widthValue of widthArray) {
-            let screen = {width: widthValue,height: 980};
+            let screen = {width: widthValue + 34,height: 980};
             
             let driver = await new Builder()
                 .forBrowser('chrome')
@@ -27,7 +28,12 @@ module.exports = async (inputPath, pictureObj)=>{
                     let obj = pictureObj[imageId]
 
                     // add width values to image info
-                    await el.getRect().then(rect=>obj.widths.add(rect.width))
+                    let rect = await el.getRect()
+                    obj.widths.add(rect.width)
+                    obj.detailWidths[widthValue] = {
+                        innerWidth : widthValue,
+                        imageWidth : rect.width,
+                    }
                 }                
             }
         

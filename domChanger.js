@@ -14,7 +14,8 @@ module.exports = (filePath, folderDest)=>{
         imageEl.setAttribute("data-domchangerid", hash); 
         pictureObj[hash] = {
             src: folderDest + "/" + imageEl.getAttribute("src"),
-            widths: new Set()
+            widths: new Set(),
+            detailWidths: {}
         };
     })
 
