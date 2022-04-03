@@ -14,7 +14,6 @@ let path = htmlFilesArr[0]
 const pictureObj = domChanger(path,destination);
 
 (async () => { 
-    let filledObjArray = await browserCheck.call(this,path, pictureObj)
-    
-    image(filledObjArray, destination, path)
+	let filledObjArray = await browserCheck.call(this,path, pictureObj)
+	image(filledObjArray, destination, path)
 })();
