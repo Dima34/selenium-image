@@ -8,20 +8,21 @@ const {By,Key,Builder} = require("selenium-webdriver");
 const chrome = require('selenium-webdriver/chrome');
 
 
-// const browserCheck = require("./browserCheck")
 // const widthArray = [320, 360, 375, 414, 428, 768, 1024, 1280, 1366, 1440, 1536, 1920]
-const widthArray = [320, 1280, 1440, 1920]
-const source = './src'
-const destination = './_dest'
+const widthArray = [320, 1280, 1440, 1920];
+const source = './src';
+const destination = './_dest';
 
-const newDestination = copyFolder(source,destination)
+const newDestination = copyFolderTo(source,destination)
 const htmlFilesArr = glob.sync(newDestination + '/**/*.html')
 
 let filePath = htmlFilesArr[0]
 
-const pictureObj = domChanger(filePath,destination);
+const pictureObj = setImageId(filePath,destination);
 
-browserCheck.call(this,filePath, pictureObj).then(filledObj => image(filledObj, destination, filePath))
+browserCheck.call(this,filePath, pictureObj)
+	.then(filledObj => createPictureTag(filledObj)
+		.then(imageObject => replaceImages(filePath, imageObject)))
 
 // image searching and browser resize functionality
 async function browserCheck(inputPath, pictureObj){
@@ -72,14 +73,14 @@ async function browserCheck(inputPath, pictureObj){
 	}
 }
 
-function copyFolder(source, destination) {
+function copyFolderTo(source, destination) {
 	// copy source folder to destination
 	fsExtra.copySync(source, destination);
 
 	return path.resolve(destination)
 }
 
-function domChanger(filePath, folderDest) {
+function setImageId(filePath, folderDest) {
 	const textContent = fs.readFileSync(filePath, 'utf8')
 	const root = HTMLParser.parse(textContent); 
 	const imageArray = root.querySelectorAll("img")
@@ -107,7 +108,17 @@ function domChanger(filePath, folderDest) {
 	return pictureObj
 }
 
-async function image(imageObject, destinationFolder, filePath) {
+async function makeImage(imageObject) {
+	return await Image(imageObject.src, {
+		widths: [...imageObject.widths],
+		outputDir: destination + "/img/",
+		formats: ["png"]
+	})
+}
+
+async function createPictureTag(imageObjectOld) {
+	imageObject = {...imageObjectOld}
+
 	for (const obj in imageObject) {		
 		// Create sizes line
 		let detailWidths = imageObject[obj].detailWidths
@@ -130,11 +141,7 @@ async function image(imageObject, destinationFolder, filePath) {
 			}                
 		});
 
-		let stats = await Image(imageObject[obj].src, {
-			widths: [...imageObject[obj].widths],
-			outputDir: destinationFolder + "/img/",
-			formats: ["png"]
-		})
+		let stats = await makeImage(imageObject[obj])
 
 		// Create src line and create a picture tag
 		let pictureTag = "<picture>"
@@ -155,6 +162,10 @@ async function image(imageObject, destinationFolder, filePath) {
 		imageObject[obj].pictureTag = pictureTag
 	}
 
+	return imageObject
+}
+
+function replaceImages(filePath, imageObject) {
 	const textContent = fs.readFileSync(filePath, 'utf8')
 	const root = HTMLParser.parse(textContent); 
 	const imageArray = root.querySelectorAll("img")
