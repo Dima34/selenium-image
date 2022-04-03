@@ -16,13 +16,20 @@ const destination = './_dest';
 const newDestination = copyFolderTo(source,destination)
 const htmlFilesArr = glob.sync(newDestination + '/**/*.html')
 
-let filePath = htmlFilesArr[0]
 
-const pictureObj = setImageId(filePath,destination);
 
-browserCheck.call(this,filePath, pictureObj)
-	.then(filledObj => createPictureTag(filledObj)
-		.then(imageObject => replaceImages(filePath, imageObject)))
+async function main(){
+	for (const filePathItem of htmlFilesArr) {
+		console.log(`checking filepath - `, filePathItem);
+		const pictureObj = setImageId(filePathItem,destination);
+
+		await browserCheck.call(this,filePathItem, pictureObj)
+			.then(filledObj => createPictureTag(filledObj)
+				.then(imageObject => replaceImages(filePathItem, imageObject)))
+	}	
+}
+
+main()
 
 // image searching and browser resize functionality
 async function browserCheck(inputPath, pictureObj){
