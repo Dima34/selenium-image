@@ -119,7 +119,7 @@ async function makeImage(imageObject) {
 	return await Image(imageObject.src, {
 		widths: [...imageObject.widths],
 		outputDir: destination + "/img/",
-		formats: ["png"]
+		formats: ["webp","png"]
 	})
 }
 
